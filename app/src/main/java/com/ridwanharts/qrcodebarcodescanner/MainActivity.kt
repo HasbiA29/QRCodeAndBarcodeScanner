@@ -1,4 +1,4 @@
-package com.ridwanharts.barcodescannerpns
+package com.ridwanharts.qrcodebarcodescanner
 
 import android.Manifest
 import android.content.ActivityNotFoundException
@@ -7,8 +7,8 @@ import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
-import android.webkit.URLUtil
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +22,6 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.jetbrains.anko.db.insert
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
@@ -50,11 +49,17 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             mSelectedIndices = state.getIntegerArrayList(SELECTED_FORMATS)
             mCameraId = state.getInt(CAMERA_ID, -1)
         }else{
-            mFlash = false;
-            mAutoFocus = true;
-            mSelectedIndices = null;
-            mCameraId = -1;
-            mScannerView = barcode
+            try {
+
+
+                mFlash = false;
+                mAutoFocus = true;
+                mSelectedIndices = null;
+                mCameraId = -1;
+                mScannerView = barcode
+            }catch (e: RuntimeException){
+                Log.e("TAG", "$e")
+            }
         }
 
     }
@@ -91,7 +96,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             val auto = findViewById<ImageButton>(R.id.auto_focus)
             if (mAutoFocus){
                 mAutoFocus = false
-                auto.setImageDrawable(resources.getDrawable(R.drawable.ic_scan))
+                auto.setImageDrawable(resources.getDrawable(R.drawable.ic_focus_off))
                 mScannerView?.setAutoFocus(mAutoFocus)
             }else{
                 mAutoFocus = true
@@ -104,11 +109,15 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     private fun checkPermissions() {
         if (allPermissionsGranted()) {
 
+/*            setupFormats()
+            mScannerView!!.setResultHandler(this)
+            mScannerView!!.setAspectTolerance(0.5f)
+            mScannerView!!.startCamera(mCameraId)
+            mScannerView!!.flash = mFlash
+            mScannerView!!.setAutoFocus(mAutoFocus)*/
+
             setupFormats()
-            mScannerView?.setAspectTolerance(0.5f)
-            mScannerView?.startCamera(mCameraId)
-            mScannerView?.flash = mFlash
-            mScannerView!!.setAutoFocus(mAutoFocus)
+            mScannerView!!.setAspectTolerance(0.5f);
             mScannerView!!.setResultHandler(this)
 
         } else {
@@ -213,7 +222,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                     mScannerView!!.resumeCameraPreview(this)
                 }
             }
-            .setNegativeButton("Ulang", R.drawable.ic_scan) { dialogInterface, which ->
+            .setNegativeButton("Ulang", R.drawable.ic_focus_off) { dialogInterface, which ->
                 dialogInterface?.dismiss()
                 mScannerView!!.resumeCameraPreview(this)
             }

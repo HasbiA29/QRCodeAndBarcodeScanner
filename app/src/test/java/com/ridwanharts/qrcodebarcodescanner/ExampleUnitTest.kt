@@ -1,4 +1,4 @@
-package com.ridwanharts.barcodescannerpns
+package com.ridwanharts.qrcodebarcodescanner
 
 import org.junit.Test
 
