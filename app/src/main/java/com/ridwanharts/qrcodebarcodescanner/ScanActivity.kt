@@ -17,24 +17,23 @@ import androidx.core.content.ContextCompat
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.shreyaspatil.MaterialDialog.MaterialDialog
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_scan.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.jetbrains.anko.db.insert
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
+class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     private var mScannerView: ZXingScannerView? = null
     private var mSelectedIndices: ArrayList<Int>? = null
-
     private var mFlash = false
     private var mAutoFocus = false
     private var mCameraId = -1
 
     override fun onCreate(state: Bundle?) {
         super.onCreate(state)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_scan)
 
         init(state)
         checkPermissions()
@@ -50,8 +49,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             mCameraId = state.getInt(CAMERA_ID, -1)
         }else{
             try {
-
-
                 mFlash = false;
                 mAutoFocus = true;
                 mSelectedIndices = null;
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                 Log.e("TAG", "$e")
             }
         }
-
     }
 
     private fun buttonControl(){
@@ -109,13 +105,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     private fun checkPermissions() {
         if (allPermissionsGranted()) {
 
-/*            setupFormats()
-            mScannerView!!.setResultHandler(this)
-            mScannerView!!.setAspectTolerance(0.5f)
-            mScannerView!!.startCamera(mCameraId)
-            mScannerView!!.flash = mFlash
-            mScannerView!!.setAutoFocus(mAutoFocus)*/
-
             setupFormats()
             mScannerView!!.setAspectTolerance(0.5f);
             mScannerView!!.setResultHandler(this)
@@ -125,14 +114,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mScannerView!!.setResultHandler(this)
-        mScannerView!!.startCamera(mCameraId)
-        mScannerView!!.flash = mFlash
-        mScannerView!!.setAutoFocus(mAutoFocus)
     }
 
     override fun onRequestPermissionsResult(
@@ -254,6 +235,14 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         outState.putBoolean(AUTO_FOCUS_STATE, mAutoFocus)
         outState.putIntegerArrayList(SELECTED_FORMATS, mSelectedIndices)
         outState.putInt(CAMERA_ID, mCameraId)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mScannerView!!.setResultHandler(this)
+        mScannerView!!.startCamera(mCameraId)
+        mScannerView!!.flash = mFlash
+        mScannerView!!.setAutoFocus(mAutoFocus)
     }
 
     companion object {

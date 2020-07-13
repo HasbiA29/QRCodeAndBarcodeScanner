@@ -25,7 +25,7 @@ class HomeActivity : AppCompatActivity(), RecylerViewClickListener {
         setContentView(R.layout.activity_home)
 
         scan_now.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         }
 

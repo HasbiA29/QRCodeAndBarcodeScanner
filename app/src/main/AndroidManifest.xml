@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ridwanharts.qrcodebarcodescanner.MainActivity">
+        <activity android:name="com.ridwanharts.qrcodebarcodescanner.ScanActivity">
 
         </activity>
     </application>
